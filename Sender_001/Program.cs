@@ -4,12 +4,10 @@ using System.Text;
 using Newtonsoft.Json;
 
 
-
 namespace Sender_001
 {
     class Program
     {
-        public string applicationName = "Sender-001";
         public int number;
 
         public delegate void Handler(string message);
@@ -26,32 +24,28 @@ namespace Sender_001
         {
             Program pr = new Program();
 
-
             pr.Notify += SendMessage;
-            pr.Sum(3, 1);
+            pr.Sum(Constant.a, Constant.b);
             pr.Notify -= SendMessage;
         }
+
         private static void SendMessage(string message)
         {
-            var factory = new RabbitMQ.Client.ConnectionFactory() { HostName = "94.131.241.80", Port = 5672, UserName = "testmf2", Password = "As123456" };
+            var factory = new RabbitMQ.Client.ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(queue: Constant.queue, durable: Constant.durable, exclusive: Constant.exclusive, autoDelete: Constant.autoDelete, arguments: Constant.arguments);
 
                     var body = Encoding.UTF8.GetBytes(message);
-
               
-                    channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: body);
+                    channel.BasicPublish(exchange: Constant.exchange, routingKey: Constant.routingKey, basicProperties: Constant.basicProperties, body: body);
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }
             Console.WriteLine(" Press [enter] to exit.");
             Console.ReadLine();
-            
-
-//            Console.WriteLine(message);
         }
     }
 }
