@@ -21,12 +21,11 @@ namespace Broker
 
         public Message ToMessage(Dictionary<String, String> configurationDictionary)
         {
+
             applicationName = configurationDictionary["applicationName"];
-
-            CultureInfo provider = new CultureInfo("uk-UA");
-            DateTime.Parse(configurationDictionary["date"], provider, DateTimeStyles.NoCurrentDateDefault);
-
+            date = DateTime.Parse(configurationDictionary["date"]);
             number = int.Parse(configurationDictionary["number"]);
+
             return this;
         }
 
