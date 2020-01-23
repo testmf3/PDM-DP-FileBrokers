@@ -25,7 +25,9 @@ namespace Worker_001
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(queue: "hello", 
+                        durable: false, exclusive: false, 
+                        autoDelete: false, arguments: null);
 
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
@@ -47,10 +49,13 @@ namespace Worker_001
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
 
-                        //TODO answer
 
+                        //Unsuscribe
+                        channel.BasicReject(ea.DeliveryTag, false);
+                        Console.WriteLine(" [x] Done");
+                        
                     };
-                    channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
+                    channel.BasicConsume(queue: "hello", autoAck: false, consumer: consumer);
 
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();
