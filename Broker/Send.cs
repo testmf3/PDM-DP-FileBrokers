@@ -8,10 +8,14 @@ namespace Broker
     class Send
     {
 
-
-        public /*static */void Connect(string destination, string hostName, Int32 port, string userName, string password, Message message)
+        public /*static */void Connect(DestinationInfo destinationInfo, Message message)
         {
-            var factory = new RabbitMQ.Client.ConnectionFactory() { HostName = hostName, Port = port, UserName = userName, Password = password };
+            var factory = new RabbitMQ.Client.ConnectionFactory() { 
+                HostName = destinationInfo.HostName, 
+                Port = destinationInfo.Port, 
+                UserName = destinationInfo.UserName, 
+                Password = destinationInfo.Password
+            };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
