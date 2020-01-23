@@ -7,7 +7,7 @@ namespace Sender_001
 {
     class Constant
     {
-        public static string applicationName = "Sender-001";
+        public static string applicationName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;//"Sender-001"
 
         //numbers for Sum
         public static int a = 1;
