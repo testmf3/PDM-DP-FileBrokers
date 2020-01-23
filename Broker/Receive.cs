@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -14,7 +12,7 @@ namespace Broker
     {
         Message message;
 
-        Message parseByte(byte[] body)
+        Message ParseByte(byte[] body)
         {
             var configurationString = Encoding.Default.GetString(body);
             Dictionary<String, String> configurationDictionary = JsonConvert.DeserializeObject<Dictionary<String, String>>(configurationString);
@@ -41,7 +39,7 @@ namespace Broker
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                        message = parseByte(ea.Body);
+                        message = ParseByte(ea.Body);
                     };
                     channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
 

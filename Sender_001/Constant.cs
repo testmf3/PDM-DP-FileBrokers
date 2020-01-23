@@ -1,7 +1,6 @@
 ﻿using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Sender_001
 {
@@ -26,7 +25,7 @@ namespace Sender_001
         public static bool durable = false;
         public static bool exclusive = false;
         public static bool autoDelete = false;
-        public static System.Collections.Generic.IDictionary<String, Object> arguments = null;
+        public static IDictionary<string, object> arguments = null;
 
 
         //BasicPublish

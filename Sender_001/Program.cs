@@ -31,7 +31,7 @@ namespace Sender_001
 
         private static void SendMessage(string message)
         {
-            var factory = new RabbitMQ.Client.ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
+            var factory = new ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())

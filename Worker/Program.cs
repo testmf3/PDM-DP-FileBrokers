@@ -5,18 +5,14 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.Json;
 
 namespace Worker_001
 {
     class Program
-    {
-
-        public IConfigurationRoot Configuration { get; set; }
+    { 
 
         static void Main(string[] args)
         {
-
 
             var factory = new ConnectionFactory()
             {
@@ -40,7 +36,7 @@ namespace Worker_001
 
                         Config config = new Config();
 
-                        config.toConfig(configurationDictionary);
+                        config.ToConfig(configurationDictionary);
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
 
@@ -48,6 +44,9 @@ namespace Worker_001
 
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
+
+                        //TODO answer
+
                     };
                     channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace Broker
 {
@@ -18,10 +17,7 @@ namespace Broker
             this.number = number;
         }
 
-        public Message()
-        {
-
-        }
+        public Message(){}
 
         public Message ToMessage(Dictionary<String, String> configurationDictionary)
         {

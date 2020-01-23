@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Broker
@@ -8,13 +8,13 @@ namespace Broker
     class Send
     {
 
-        public /*static */void Connect(DestinationInfo destinationInfo, Message message)
+        public void Connect(DestinationInfo destinationInfo, Message message)
         {
-            var factory = new RabbitMQ.Client.ConnectionFactory() { 
-                HostName = destinationInfo.HostName, 
-                Port = destinationInfo.Port, 
-                UserName = destinationInfo.UserName, 
-                Password = destinationInfo.Password
+            var factory = new ConnectionFactory() { 
+                HostName = destinationInfo.hostName, 
+                Port = destinationInfo.port, 
+                UserName = destinationInfo.userName, 
+                Password = destinationInfo.password
             };
             using (var connection = factory.CreateConnection())
             {

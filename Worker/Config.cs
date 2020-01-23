@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Worker_001
 {
@@ -9,7 +7,7 @@ namespace Worker_001
     {
         public int number { get; set; }
         public string applicationName { get; set; }
-        public void toConfig(Dictionary<String, String> configurationDictionary) {
+        public void ToConfig(Dictionary<String, String> configurationDictionary) {
 
             number = int.Parse(configurationDictionary["number"]);
             applicationName = configurationDictionary["applicationName"];

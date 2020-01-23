@@ -31,8 +31,7 @@ namespace Broker
 
         static void Main(string[] args)
         {
-           // Program program = new Program();
-
+        
             Receive receive = new Receive();
             Exchange(receive.connect());
         }

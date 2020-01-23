@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Broker
+﻿namespace Broker
 {
     public static class Constant
     {
         public static readonly DestinationInfo sender_001 = new DestinationInfo
         {
-            Destination = "Worker-001",
-            HostName = "94.131.241.80",
-            Port = 5672,
-            UserName = "testmf2",
-            Password = "As123456"
+            destination = "Worker-001",
+            hostName = "94.131.241.80",
+            port = 5672,
+            userName = "testmf2",
+            password = "As123456"
         };
 
-       
     }
 }
