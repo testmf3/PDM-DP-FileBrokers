@@ -6,12 +6,14 @@ namespace Sender_001
 {
     class Message
     {
-        public string applicationName { get; } = "Sender-001";
+        public string applicationName { get; } = Constant.applicationName;
+        public DateTime date { get; set; }
         public int number { get; set; }
 
-        public Message(int num)
+        public Message(int number)
         {
-            number = num;
+            date = DateTime.Now;
+            this.number = number;
         }
     }
 }
