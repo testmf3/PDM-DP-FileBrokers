@@ -2,7 +2,8 @@
 using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
-
+using System.Collections.Generic;
+using RabbitMQ.Client.Content;
 
 namespace Sender_001
 {
@@ -10,14 +11,15 @@ namespace Sender_001
     {
         public int number;
 
-        public delegate void Handler(string message);
+        public delegate void Handler(Message message);
         public event Handler Notify;
 
 
         public void Sum(int a, int b)
         {
             number = a + b;
-            Notify?.Invoke(JsonConvert.SerializeObject(new Message(number)));
+            
+            Notify?.Invoke(new Message(number));
         }
 
         static void Main(string[] args)
@@ -29,18 +31,29 @@ namespace Sender_001
             pr.Notify -= SendMessage;
         }
 
-        private static void SendMessage(string message)
+        private static void SendMessage(Message message)
         {
             var factory = new ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: Constant.queue, durable: Constant.durable, exclusive: Constant.exclusive, autoDelete: Constant.autoDelete, arguments: Constant.arguments);
 
-                    var body = Encoding.UTF8.GetBytes(message);
-              
-                    channel.BasicPublish(exchange: Constant.exchange, routingKey: Constant.routingKey, basicProperties: Constant.basicProperties, body: body);
+                    channel.QueueDeclare(queue: Constant.queue, durable: Constant.durable, exclusive: Constant.exclusive, autoDelete: Constant.autoDelete, arguments: Constant.arguments);
+                    
+                    IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
+
+                    messageBuilder.Body["applicationName"] = message.applicationName;
+                    messageBuilder.Body["number"] = message.number;
+                    messageBuilder.Body["date"] = message.date;
+
+        
+                    channel.BasicPublish(
+                        exchange: Constant.exchange, 
+                        routingKey: Constant.routingKey, 
+                        basicProperties: Constant.basicProperties, 
+                        body: messageBuilder.GetContentBody());
+
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }

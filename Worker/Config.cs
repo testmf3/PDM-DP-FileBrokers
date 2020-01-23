@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RabbitMQ.Client.Content;
+using System;
 using System.Collections.Generic;
 
 namespace Worker_001
@@ -7,10 +8,10 @@ namespace Worker_001
     {
         public int number { get; set; }
         public string applicationName { get; set; }
-        public void ToConfig(Dictionary<String, String> configurationDictionary) {
+        public void ToConfig(IMapMessageReader messageReader) {
 
-            number = int.Parse(configurationDictionary["number"]);
-            applicationName = configurationDictionary["applicationName"];
+            number = int.Parse(messageReader.Body["number"].ToString());
+            applicationName = messageReader.Body["applicationName"].ToString();
         }
 
         public int Sum(int value) {

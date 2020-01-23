@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -29,14 +30,15 @@ namespace Worker_001
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                        var body = ea.Body;
+                      
+                        IBasicProperties props = ea.BasicProperties;
+                        byte[] receivedBody = ea.Body;
 
-                        var configurationString = Encoding.Default.GetString(body);
-                        Dictionary<String, String> configurationDictionary = JsonConvert.DeserializeObject<Dictionary<String, String>>(configurationString);
+                        IMapMessageReader messageReader = new MapMessageReader(props, receivedBody);
 
                         Config config = new Config();
 
-                        config.ToConfig(configurationDictionary);
+                        config.ToConfig(messageReader);
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
 
 
@@ -12,12 +13,9 @@ namespace Broker
     {
         Message message;
 
-        Message ParseByte(byte[] body)
+        Message ParseMessageReader(IMapMessageReader messageReader)
         {
-            var configurationString = Encoding.Default.GetString(body);
-            Dictionary<String, String> configurationDictionary = JsonConvert.DeserializeObject<Dictionary<String, String>>(configurationString);
-
-            return new Message().ToMessage(configurationDictionary);
+            return new Message().ToMessage(messageReader);
         }
 
         public Message connect()
@@ -39,7 +37,12 @@ namespace Broker
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                        message = ParseByte(ea.Body);
+                      
+                        IBasicProperties props = ea.BasicProperties;
+                        byte[] receivedBody = ea.Body;
+
+                        IMapMessageReader messageReader = new MapMessageReader(props, receivedBody);
+
                     };
                     channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
 

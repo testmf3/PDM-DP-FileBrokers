@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Content;
 using System;
 using System.Text;
 
@@ -7,7 +8,6 @@ namespace Broker
 {
     class Send
     {
-
         public void Connect(DestinationInfo destinationInfo, Message message)
         {
             var factory = new ConnectionFactory() { 
@@ -22,10 +22,12 @@ namespace Broker
                 {
                     channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-                    var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+                    IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
-
-                    channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: body);
+                    messageBuilder.Body["applicationName"] = message.applicationName;
+                    messageBuilder.Body["number"] = message.number;
+                 
+                    channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: body: messageBuilder.GetContentBody());
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }

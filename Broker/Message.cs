@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RabbitMQ.Client.Content;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -19,12 +20,12 @@ namespace Broker
 
         public Message(){}
 
-        public Message ToMessage(Dictionary<String, String> configurationDictionary)
+        public Message ToMessage(IMapMessageReader messageReader)
         {
 
-            applicationName = configurationDictionary["applicationName"];
-            date = DateTime.Parse(configurationDictionary["date"]);
-            number = int.Parse(configurationDictionary["number"]);
+            applicationName = messageReader.Body["applicationName"].ToString();
+            date = DateTime.Parse(messageReader.Body["date"].ToString());
+            number = int.Parse(messageReader.Body["number"].ToString());
 
             return this;
         }
