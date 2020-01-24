@@ -32,11 +32,9 @@ namespace Worker_001
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                      
-                        IBasicProperties props = ea.BasicProperties;
-                        byte[] receivedBody = ea.Body;
-
-                        IMapMessageReader messageReader = new MapMessageReader(props, receivedBody);
+                     
+                        //Message body
+                        IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
 
                         Config config = new Config();
 
@@ -46,9 +44,8 @@ namespace Worker_001
 
                         config.Sum(5);
 
-                        Console.WriteLine("To config object");
+                        Console.WriteLine("To config object after sum");
                         Console.WriteLine(config);
-
 
                         //Unsuscribe
                         channel.BasicReject(ea.DeliveryTag, false);

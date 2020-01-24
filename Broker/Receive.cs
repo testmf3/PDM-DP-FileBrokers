@@ -18,7 +18,7 @@ namespace Broker
             return new Message().ToMessage(messageReader);
         }
 
-        public Message connect()
+        public Message Connect()
         {
             var factory = new ConnectionFactory()
             {
@@ -42,6 +42,8 @@ namespace Broker
                         byte[] receivedBody = ea.Body;
 
                         IMapMessageReader messageReader = new MapMessageReader(props, receivedBody);
+
+                        message = ParseMessageReader(messageReader);
 
                     };
                     channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);

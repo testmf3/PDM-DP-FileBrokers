@@ -33,7 +33,7 @@ namespace Broker
         {
         
             Receive receive = new Receive();
-            Exchange(receive.connect());
+            Exchange(receive.Connect());
         }
     }
 }
