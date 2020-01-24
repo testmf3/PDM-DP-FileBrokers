@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Broker
 {
@@ -8,24 +9,23 @@ namespace Broker
         static void Exchange(Message message)
         {
             DestinationInfo destinationInfo = new DestinationInfo();
-           
-            //TODO switch
-            switch (message.applicationName)
+
+            if (message != null)
             {
-                case "Sender-001":
-                    {
-                        DestinationInfo.Clone(Constant.sender_001, ref destinationInfo);
-                    }; break;
+                //TODO switch
+                switch (message.applicationName)
+                {
+                    case "Sender-001":
+                        {
+                            DestinationInfo.Clone(Constant.WORKER_001, ref destinationInfo);
+                        }; break;
 
-                default:; break;
+                    default:; break;
+                }
+
+                Send send = new Send();
+                send.Connect(destinationInfo, message);
             }
-
-           
-            Send send = new Send();
-            send.Connect(destinationInfo, message);
-
-            Console.WriteLine(destinationInfo);
-            Console.WriteLine(message);
         }
 
 
@@ -33,7 +33,8 @@ namespace Broker
         {
         
             Receive receive = new Receive();
-            Exchange(receive.Connect());
+            Message message = receive.Connect();  
+            Exchange(message);
         }
     }
 }

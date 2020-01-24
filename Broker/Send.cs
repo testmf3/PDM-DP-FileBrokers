@@ -11,6 +11,7 @@ namespace Broker
     {
         public void Connect(DestinationInfo destinationInfo, Message message)
         {
+            Console.WriteLine(destinationInfo);
             var factory = new ConnectionFactory() { 
                 HostName = destinationInfo.hostName, 
                 Port = destinationInfo.port, 
@@ -22,7 +23,8 @@ namespace Broker
                 using (var channel = connection.CreateModel())
                 {
                     
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(queue:Constant.HELLO2_QUEUE, durable: false, 
+                        exclusive: false, autoDelete: false, arguments: null);
 
                     //Message body
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
@@ -35,15 +37,16 @@ namespace Broker
                     channel.ConfirmSelect();
                     channel.BasicNacks += (sender, e) =>
                     {
-                        Console.Write("Not received" + sender);
+                        Console.Write("Not received" + message);
                     };
 
-                    //Properties
-                    var properties = channel.CreateBasicProperties();
-
                     //Publish
-                    channel.BasicPublish(exchange: "", routingKey: "hello", 
-                        basicProperties: properties, body: messageBuilder.GetContentBody());
+                    channel.BasicPublish(
+                        exchange: "", 
+                        routingKey: Constant.HELLO2_QUEUE, 
+                        basicProperties: channel.CreateBasicProperties(), 
+                        body: messageBuilder.GetContentBody());
+
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }

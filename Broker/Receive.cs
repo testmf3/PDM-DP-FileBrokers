@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
@@ -13,44 +14,34 @@ namespace Broker
     {
         Message message;
 
-        Message ParseMessageReader(IMapMessageReader messageReader)
-        {
-            return new Message().ToMessage(messageReader);
-        }
-
         public Message Connect()
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "94.131.241.80",
-                Port = 5672,
-                UserName = "testmf3",
-                Password = "As123456"
+                HostName = Constant.SENDER_001.hostName,
+                Port = Constant.SENDER_001.port,
+                UserName = Constant.SENDER_001.userName,
+                Password = Constant.SENDER_001.password
             };
 
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
-
+                    channel.QueueDeclare(queue: Constant.HELLO1_QUEUE, Constant.DURABLE,
+                        Constant.EXCLUSIVE, Constant.AUTO_DELETE, Constant.ARGUMENTS);
+                  
                     var consumer = new EventingBasicConsumer(channel);
-                    consumer.Received += (model, ea) =>
-                    {
-                      
-                        IBasicProperties props = ea.BasicProperties;
-                        byte[] receivedBody = ea.Body;
-
-                        IMapMessageReader messageReader = new MapMessageReader(props, receivedBody);
-
-                        message = ParseMessageReader(messageReader);
-
+                   
+                   
+                    consumer.Received += (model, ea) =>    
+                    {  
+                        IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
+                        message = message.ToMessage(messageReader);   
+                        Console.WriteLine(message);
                     };
-                    channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
-
-                    Console.WriteLine(" Press [enter] to exit.");
-                    Console.ReadLine();
-
+                    
+                    channel.BasicConsume(queue: Constant.HELLO1_QUEUE, Constant.AUTO_ACK, consumer: consumer);
                     return message;
                 }
             }
