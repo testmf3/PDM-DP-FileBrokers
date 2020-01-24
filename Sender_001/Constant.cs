@@ -6,32 +6,32 @@ namespace Sender_001
 {
     class Constant
     {
-        public static string applicationName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;//"Sender-001"
+        public static string APPLICATIONNAME = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;//"Sender-001"
 
         //numbers for Sum
-        public static int a = 1;
-        public static int b = 1;
+        public static int A = 1;
+        public static int B = 1;
 
 
         //ConnectionFactory
-        public static string hostName = "94.131.241.80";
-        public static Int32 port = 5672;
-        public static string userName = "testmf2";
-        public static string password = "As123456";
+        public static string HOSTNAME = "94.131.241.80";
+        public static Int32 PORT = 5672;
+        public static string USERNAME = "testmf2";
+        public static string PASSWORD = "As123456";
 
 
         //QueueDeclare
-        public static string queue = "hello";
-        public static bool durable = false;
-        public static bool exclusive = false;
-        public static bool autoDelete = false;
-        public static IDictionary<string, object> arguments = null;
+        public static string QUEUE = "hello";
+        public static bool DURABLE = false;
+        public static bool EXLUSIVE = false;
+        public static bool AUTODELETE = false;
+        public static IDictionary<string, object> ARGUMENTS = null;
 
 
         //BasicPublish
-        public static string exchange = "";
-        public static string routingKey = "hello";
-        public static IBasicProperties basicProperties = null;
+        public static string EXCHANGE = "";
+        public static string ROUTINGKEY = "hello";
+        public static IBasicProperties BASICPROPERTIES = null;
 
     }
 }

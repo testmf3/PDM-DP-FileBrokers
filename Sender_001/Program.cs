@@ -10,7 +10,6 @@ namespace Sender_001
 {
     class Program
     {
-
         public int number;
         public delegate void Handler(Message message);
         public event Handler Notify;
@@ -28,36 +27,46 @@ namespace Sender_001
             Program pr = new Program();
 
             pr.Notify += SendMessage;
-            pr.Sum(Constant.a, Constant.b);
+            pr.Sum(Constant.A, Constant.B);
             pr.Notify -= SendMessage;
         }
 
         private static void SendMessage(Message message)
         {
-            var factory = new ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
+            var factory = new ConnectionFactory() 
+            { 
+                HostName = Constant.HOSTNAME, 
+                Port = Constant.PORT, 
+                UserName = Constant.USERNAME, 
+                Password = Constant.PASSWORD 
+            };
+
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-
-                    channel.QueueDeclare(queue: Constant.queue, durable: Constant.durable, exclusive: Constant.exclusive, autoDelete: Constant.autoDelete, arguments: Constant.arguments);
+                    channel.QueueDeclare(
+                        queue: Constant.QUEUE, 
+                        durable: Constant.DURABLE, 
+                        exclusive: Constant.EXLUSIVE, 
+                        autoDelete: Constant.AUTODELETE, 
+                        arguments: Constant.ARGUMENTS);
                     
+
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
-                   
                     messageBuilder.Body["applicationName"] = message.applicationName;
                     messageBuilder.Body["number"] = message.number;
                     messageBuilder.Body["date"] = message.date.ToString();
 
 
                     channel.BasicPublish(
-                        exchange: Constant.exchange,
-                        routingKey:Constant.routingKey,
-                        Constant.basicProperties,
+                        exchange: Constant.EXCHANGE,
+                        routingKey:Constant.ROUTINGKEY,
+                        Constant.BASICPROPERTIES,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);
-                    
                 }
             }
             Console.WriteLine(" Press [enter] to exit.");
