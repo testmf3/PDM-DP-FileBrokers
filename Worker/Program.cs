@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
@@ -11,28 +10,30 @@ namespace Worker_001
 {
     class Program
     { 
-
         static void Main(string[] args)
         {
-
             var factory = new ConnectionFactory()
             {
-                HostName = "94.131.241.80", Port = 5672,
-                UserName = "testmf3", Password = "As123456"
+                HostName = Constant.HOSTNAME, 
+                Port = Constant.PORT, 
+                UserName = Constant.USERNAME, 
+                Password = Constant.PASSWORD
             };
 
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello", 
-                        durable: false, exclusive: false, 
-                        autoDelete: false, arguments: null);
+                    channel.QueueDeclare(
+                        queue: Constant.HOSTNAME, 
+                        durable: Constant.DURABLE, 
+                        exclusive: Constant.EXCLUSIVE, 
+                        autoDelete: Constant.AUTODELETE, 
+                        arguments: Constant.ARGUMENTS);
 
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                     
                         //Message body
                         IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
 
@@ -42,7 +43,7 @@ namespace Worker_001
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
 
-                        config.Sum(5);
+                        config.Sum(Constant.NUMBER);
 
                         Console.WriteLine("To config object after sum");
                         Console.WriteLine(config);
@@ -52,7 +53,10 @@ namespace Worker_001
                         Console.WriteLine(" [x] Done");
                         
                     };
-                    channel.BasicConsume(queue: "hello", autoAck: false, consumer: consumer);
+                    channel.BasicConsume(
+                        queue: Constant.QUEUE, 
+                        autoAck: Constant.AUTOACK, 
+                        consumer: consumer);
 
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();

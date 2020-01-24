@@ -9,9 +9,8 @@ namespace Worker_001
         public int number { get; set; }
         public string applicationName { get; set; }
         public void ToConfig(IMapMessageReader messageReader) {
-
             number = int.Parse(messageReader.Body["number"].ToString());
-            applicationName = messageReader.Body["applicationName"].ToString();
+            //applicationName = messageReader.Body["applicationName"].ToString();
         }
 
         public int Sum(int value) {
