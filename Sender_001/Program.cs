@@ -4,11 +4,13 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using RabbitMQ.Client.Content;
+using System.Threading;
 
 namespace Sender_001
 {
     class Program
     {
+        public static int count = 10;
         public int number;
 
         public delegate void Handler(Message message);
@@ -43,18 +45,23 @@ namespace Sender_001
                     
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
+                   
                     messageBuilder.Body["applicationName"] = message.applicationName;
                     messageBuilder.Body["number"] = message.number;
-                    messageBuilder.Body["date"] = message.date;
+                    messageBuilder.Body["date"] = message.date.ToString();
 
-        
+                    IBasicProperties props = channel.CreateBasicProperties();
+
+
+
                     channel.BasicPublish(
-                        exchange: Constant.exchange, 
-                        routingKey: Constant.routingKey, 
-                        basicProperties: Constant.basicProperties, 
+                        exchange: "",
+                        routingKey: "hello",
+                        props,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);
+                    
                 }
             }
             Console.WriteLine(" Press [enter] to exit.");
