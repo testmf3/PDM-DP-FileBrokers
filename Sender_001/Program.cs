@@ -10,9 +10,8 @@ namespace Sender_001
 {
     class Program
     {
-        public static int count = 10;
-        public int number;
 
+        public int number;
         public delegate void Handler(Message message);
         public event Handler Notify;
 
@@ -50,14 +49,11 @@ namespace Sender_001
                     messageBuilder.Body["number"] = message.number;
                     messageBuilder.Body["date"] = message.date.ToString();
 
-                    IBasicProperties props = channel.CreateBasicProperties();
-
-
 
                     channel.BasicPublish(
-                        exchange: "",
-                        routingKey: "hello",
-                        props,
+                        exchange: Constant.exchange,
+                        routingKey:Constant.routingKey,
+                        Constant.basicProperties,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);
