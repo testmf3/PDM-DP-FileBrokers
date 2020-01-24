@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ_Receive", "RabbitMQ_Receive\RabbitMQ_Receive.csproj", "{27C29196-D775-4D63-9621-51533FACA2F6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ_Send", "RabbitMQ_Send\RabbitMQ_Send.csproj", "{D42FA8E3-0B83-4728-804F-DB2C097B57CF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worker_001", "Worker\Worker_001.csproj", "{8F6D6F6D-C122-4473-BCA2-22E5D1B9D6C7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sender_001", "Sender_001\Sender_001.csproj", "{E33D2BE0-A264-4173-A6C0-2F2E28094AA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broker", "Broker\Broker.csproj", "{FD9BBFBD-338E-4E93-A6AD-2592E1265BBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Broker", "Broker\Broker.csproj", "{FD9BBFBD-338E-4E93-A6AD-2592E1265BBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{27C29196-D775-4D63-9621-51533FACA2F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27C29196-D775-4D63-9621-51533FACA2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27C29196-D775-4D63-9621-51533FACA2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27C29196-D775-4D63-9621-51533FACA2F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D42FA8E3-0B83-4728-804F-DB2C097B57CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D42FA8E3-0B83-4728-804F-DB2C097B57CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D42FA8E3-0B83-4728-804F-DB2C097B57CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D42FA8E3-0B83-4728-804F-DB2C097B57CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F6D6F6D-C122-4473-BCA2-22E5D1B9D6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F6D6F6D-C122-4473-BCA2-22E5D1B9D6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F6D6F6D-C122-4473-BCA2-22E5D1B9D6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
