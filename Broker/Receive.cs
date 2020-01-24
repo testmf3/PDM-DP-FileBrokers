@@ -24,7 +24,7 @@ namespace Broker
             {
                 HostName = "94.131.241.80",
                 Port = 5672,
-                UserName = "testmf3",
+                UserName = "testmf2",
                 Password = "As123456"
             };
 

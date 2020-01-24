@@ -27,7 +27,8 @@ namespace Broker
                     //Message body
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
-                    messageBuilder.Body["applicationName"] = message.applicationName;
+                    //messageBuilder.Body["applicationName"] = message.applicationName;
+                    //messageBuilder.Body["date"] = message.date.ToString();
                     messageBuilder.Body["number"] = message.number;
 
 

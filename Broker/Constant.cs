@@ -7,7 +7,7 @@
             destination = "Worker-001",
             hostName = "94.131.241.80",
             port = 5672,
-            userName = "testmf2",
+            userName = "testmf3",
             password = "As123456"
         };
 

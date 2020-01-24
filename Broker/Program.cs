@@ -8,21 +8,29 @@ namespace Broker
         static void Exchange(Message message)
         {
             DestinationInfo destinationInfo = new DestinationInfo();
-           
-            //TODO switch
-            switch (message.applicationName)
-            {
-                case "Sender-001":
-                    {
-                        DestinationInfo.Clone(Constant.sender_001, ref destinationInfo);
-                    }; break;
 
-                default:; break;
+            message = new Message("Sender-001", DateTime.Now, 3);
+
+            if (message!=null)
+            {
+
+                //TODO switch
+                switch (message?.applicationName)
+                {
+                    case "Sender-001":
+                        {
+                            DestinationInfo.Clone(Constant.sender_001, ref destinationInfo);
+                        }; break;
+
+                    default:; break;
+                }
+
+
+                Send send = new Send();
+                send.Connect(destinationInfo, message);
+
             }
 
-           
-            Send send = new Send();
-            send.Connect(destinationInfo, message);
 
             Console.WriteLine(destinationInfo);
             Console.WriteLine(message);
