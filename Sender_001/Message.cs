@@ -14,5 +14,9 @@ namespace Sender_001
             this.number = number;
         }
 
+        public override string ToString()
+        {
+            return "name: " + applicationName  + "\ndate: " + date; 
+        }
     }
 }

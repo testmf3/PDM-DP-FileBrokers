@@ -4,6 +4,7 @@ namespace Broker
 {
     public static class Constant
     {
+        //ConnectionFactory
         public static readonly DestinationInfo WORKER_001 = new DestinationInfo
         {
             destination = "Worker-001",
@@ -22,6 +23,7 @@ namespace Broker
             password = "As123456"
         };
 
+        //QueueDeclare
         public static readonly string HELLO1_QUEUE = "hello1";
         public static readonly string HELLO2_QUEUE = "hello2";
 

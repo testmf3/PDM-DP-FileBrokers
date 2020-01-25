@@ -20,7 +20,7 @@ namespace Worker_001
 
 
         //QueueDeclare
-        public static string QUEUE = "hello";
+        public static string QUEUE = "hello2";
         public static bool DURABLE = false;
         public static bool EXCLUSIVE = false;
         public static bool AUTODELETE = false;
@@ -28,6 +28,6 @@ namespace Worker_001
 
 
         //BasicConsume 
-        public static bool AUTOACK = false;
+        public static bool AUTO_ACK = false;
     }
 }

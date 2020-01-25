@@ -17,10 +17,23 @@ namespace Broker
                 {
                     case "Sender-001":
                         {
-                            DestinationInfo.Clone(Constant.WORKER_001, ref destinationInfo);
+                            destinationInfo.userName = Constant.WORKER_001.userName;
+                            destinationInfo.password = Constant.WORKER_001.password;
+                            destinationInfo.destination = Constant.WORKER_001.destination;
+                            destinationInfo.port = Constant.WORKER_001.port;
+                            destinationInfo.hostName = Constant.WORKER_001.hostName;
+                           
                         }; break;
 
-                    default:; break;
+                    default:
+                        {
+                            destinationInfo.userName = Constant.WORKER_001.userName;
+                            destinationInfo.password = Constant.WORKER_001.password;
+                            destinationInfo.destination = Constant.WORKER_001.destination;
+                            destinationInfo.port = Constant.WORKER_001.port;
+                            destinationInfo.hostName = Constant.WORKER_001.hostName;
+
+                        }; break;
                 }
 
                 Send send = new Send();
@@ -31,10 +44,18 @@ namespace Broker
 
         static void Main(string[] args)
         {
-        
+
+
+           
             Receive receive = new Receive();
-            Message message = receive.Connect();  
-            Exchange(message);
+            Message message;
+            Console.WriteLine("Connect");
+            message = receive.Connect();
+            Console.WriteLine("Message");
+            Console.WriteLine(message);
+            //Exchange(message);
+            Console.WriteLine(" Press [enter] to exit.");
+            Console.ReadLine();
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using RabbitMQ.Client;
-using System.Text;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using RabbitMQ.Client.Content;
 using System.Threading;
 
@@ -34,13 +31,14 @@ namespace Sender_001
 
         private static void SendMessage(Message message)
         {
-            var factory = new ConnectionFactory() { HostName = Constant.hostName, Port = Constant.port, UserName = Constant.userName, Password = Constant.password };
+            var factory = new ConnectionFactory() { HostName = Constant.HOST_NAME, Port = Constant.PORT, UserName = Constant.USERNAME, Password = Constant.PASSWORD };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
 
-                    channel.QueueDeclare(queue: Constant.queue, durable: Constant.durable, exclusive: Constant.exclusive, autoDelete: Constant.autoDelete, arguments: Constant.arguments);
+
+                    channel.QueueDeclare(queue: Constant.QUEUE, durable: Constant.DURABLE, exclusive: Constant.EXCLUSIVE, autoDelete: Constant.AUTO_DELETE, arguments: Constant.ARGUMENTS);
                     
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
@@ -50,12 +48,13 @@ namespace Sender_001
                     messageBuilder.Body["date"] = message.date.ToString();
 
 
+                    Thread.Sleep(4000);
                     channel.BasicPublish(
-                        exchange: Constant.exchange,
-                        routingKey:Constant.routingKey,
-                        Constant.basicProperties,
+                        exchange: Constant.EXCHANGE,
+                        routingKey:Constant.ROUTING_KEY,
+                        basicProperties:Constant.BASIC_PROPERTIES,
                         body: messageBuilder.GetContentBody());
-
+                    
                     Console.WriteLine(" [x] Sent {0}", message);
                     
                 }

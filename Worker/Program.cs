@@ -5,6 +5,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Worker_001
 {
@@ -34,6 +35,7 @@ namespace Worker_001
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
+                        Thread.Sleep(7000);
                         //Message body
                         IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
 
@@ -43,19 +45,14 @@ namespace Worker_001
                         Console.WriteLine("To config object");
                         Console.WriteLine(config);
 
-                        config.Sum(Constant.NUMBER);
-
-                        Console.WriteLine("To config object after sum");
-                        Console.WriteLine(config);
-
                         //Unsuscribe
-                        channel.BasicReject(ea.DeliveryTag, false);
+                        //channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
                         
                     };
                     channel.BasicConsume(
                         queue: Constant.QUEUE, 
-                        autoAck: Constant.AUTOACK, 
+                        autoAck: Constant.AUTO_ACK, 
                         consumer: consumer);
 
                     Console.WriteLine(" Press [enter] to exit.");

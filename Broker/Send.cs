@@ -4,6 +4,7 @@ using RabbitMQ.Client.Content;
 using RabbitMQ.Client.MessagePatterns;
 using System;
 using System.Text;
+using System.Threading;
 
 namespace Broker
 {
@@ -11,7 +12,6 @@ namespace Broker
     {
         public void Connect(DestinationInfo destinationInfo, Message message)
         {
-            Console.WriteLine(destinationInfo);
             var factory = new ConnectionFactory() { 
                 HostName = destinationInfo.hostName, 
                 Port = destinationInfo.port, 
@@ -33,15 +33,17 @@ namespace Broker
                     //messageBuilder.Body["date"] = message.date.ToString();
                     messageBuilder.Body["number"] = message.number;
 
-
+                    /*
                     //Suscribe
                     channel.ConfirmSelect();
                     channel.BasicNacks += (sender, e) =>
                     {
                         Console.Write("Not received" + message);
                     };
+                    */
 
                     //Publish
+                   
                     channel.BasicPublish(
                         exchange: "", 
                         routingKey: Constant.HELLO2_QUEUE, 
@@ -51,8 +53,7 @@ namespace Broker
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
+           
         }
     }
 }

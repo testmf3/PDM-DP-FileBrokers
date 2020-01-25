@@ -14,24 +14,24 @@ namespace Sender_001
 
 
         //ConnectionFactory
-        public static string hostName = "94.131.241.80";
-        public static Int32 port = 5672;
-        public static string userName = "testmf2";
-        public static string password = "As123456";
+        public static string HOST_NAME = "94.131.241.80";
+        public static Int32 PORT = 5672;
+        public static string USERNAME = "testmf2";
+        public static string PASSWORD = "As123456";
 
 
         //QueueDeclare
-        public static string queue = "hello";
-        public static bool durable = false;
-        public static bool exclusive = false;
-        public static bool autoDelete = false;
-        public static IDictionary<string, object> arguments = null;
+        public static string QUEUE = "hello1";
+        public static bool DURABLE = false;
+        public static bool EXCLUSIVE = false;
+        public static bool AUTO_DELETE = false;
+        public static IDictionary<string, object> ARGUMENTS = null;
 
 
         //BasicPublish
-        public static string exchange = "";
-        public static string routingKey = "hello";
-        public static IBasicProperties basicProperties = null;
+        public static string EXCHANGE = "";
+        public static string ROUTING_KEY = "hello1";
+        public static IBasicProperties BASIC_PROPERTIES = null;
 
     }
 }
