@@ -24,7 +24,7 @@ namespace broker
             Console.WriteLine("Send:");
             Send sender = new Send();
             sender.Connect(message);
-
+            
             Console.WriteLine("end:");
             Console.ReadLine();
            
