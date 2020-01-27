@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace broker
 {
     class Program
     {
+        static List<String> names = new List<string> { "sender_001"};
 
         static void Exchange(Message message)
         {
@@ -40,6 +42,7 @@ namespace broker
         static void Main(string[] args)
         {
 
+          
             Receive receive = new Receive();
 
             Message message = new Message();
@@ -51,8 +54,16 @@ namespace broker
             Console.WriteLine(message);
             Console.ReadLine();
 
-            Console.WriteLine("Send:");
-            Exchange(message);
+            //1:n
+            names.ForEach(name =>
+            {
+                Console.WriteLine("Send to " + name);
+                message.applicationName = name;
+                Exchange(message);
+
+            });
+
+      
             
             Console.WriteLine("end:");
             Console.ReadLine();
