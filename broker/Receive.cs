@@ -9,7 +9,7 @@ namespace broker
 {
     class Receive
     {
-        public void Connect()
+        public void Connect(ref Message receivedMessage)
         {
             var factory = new ConnectionFactory() { 
                 HostName = "94.131.241.80", 
@@ -23,19 +23,21 @@ namespace broker
                 using (var channel = connection.CreateModel())
                 {
                     channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
-
+                    
+                    Message message = new Message();
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
 
                         Console.WriteLine("Receive message: ");
                         IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
-                        Message message = new Message();
+                       
                         message.ToMessage(messageReader);
-                        Console.WriteLine(messageReader.Body["applicationName"].ToString());
+                     
+                        Console.WriteLine(message);
 
                     };
-
+                    receivedMessage = message;
                     channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();
