@@ -6,6 +6,36 @@ namespace broker
     class Program
     {
 
+        static void Exchange(Message message)
+        {
+            DestinationInfo destination = new DestinationInfo();
+           
+            if (message != null)
+            {
+                //TODO switch
+                switch (message.applicationName)
+                {
+                    case "sender_001":
+                        {
+                            destination.userName = "testmf2";
+                            destination.password = "As123456";
+                            destination.destination = "Worker-001";
+                            destination.port = 5672;
+                            destination.hostName = "94.131.241.80";
+                        }; break;
+
+                    default:
+                        {
+                            Console.WriteLine("Not catch");
+                        }; break;
+                }
+
+             
+                Send sender = new Send();
+             
+                sender.Connect(destination, message);
+            }
+        }
 
         static void Main(string[] args)
         {
@@ -22,8 +52,7 @@ namespace broker
             Console.ReadLine();
 
             Console.WriteLine("Send:");
-            Send sender = new Send();
-            sender.Connect(message);
+            Exchange(message);
             
             Console.WriteLine("end:");
             Console.ReadLine();

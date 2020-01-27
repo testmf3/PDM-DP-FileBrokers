@@ -6,13 +6,18 @@ namespace broker
 {
     class Send
     {
-        public void Connect(Message message)
+        public void Connect(DestinationInfo destination, Message message)
         {
+            Console.WriteLine("Check destination: ");
+            Console.WriteLine(destination);
+            Console.WriteLine();
+
             var factory = new RabbitMQ.Client.ConnectionFactory() { 
-                HostName = "94.131.241.80", 
-                Port = 5672, 
-                UserName = "testmf2", 
-                Password = "As123456" };
+                HostName = destination.hostName, 
+                Port = destination.port, 
+                UserName = destination.userName, 
+                Password = destination.password
+            };
 
 
             using (var connection = factory.CreateConnection())

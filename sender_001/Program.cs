@@ -25,7 +25,7 @@ namespace sender_001
             Program pr = new Program();
 
             pr.Notify += SendMessage;
-            pr.Sum(5, 4);
+            pr.Sum(2, 2);
             pr.Notify -= SendMessage;
         }
 
