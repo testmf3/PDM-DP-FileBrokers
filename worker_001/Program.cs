@@ -11,10 +11,10 @@ namespace worker_001
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "94.131.241.80",
-                Port = 5672,
-                UserName = "testmf2",
-                Password = "As123456"
+                HostName = Constant.HOST_NAME,
+                Port = Constant.PORT,
+                UserName = Constant.USER_NAME,
+                Password = Constant.PASSWORD
             };
 
             using (var connection = factory.CreateConnection())
@@ -22,13 +22,15 @@ namespace worker_001
                 using (var channel = connection.CreateModel())
                 {
                     channel.QueueDeclare(
-                        queue: "hello1",
-                        durable: false,
-                        exclusive: false,
-                        autoDelete: false,
-                        arguments: null);
+                        queue: Constant.QUEUE,
+                        durable: Constant.DURABLE,
+                        exclusive: Constant.EXCLUSIVE,
+                        autoDelete: Constant.AUTO_DELETE,
+                        arguments: Constant.ARGUMENTS);
+
 
                     var consumer = new EventingBasicConsumer(channel);
+
                     consumer.Received += (model, ea) =>
                     {
                         //Message body
@@ -50,16 +52,17 @@ namespace worker_001
                         Console.WriteLine(" [x] Done");
 
                     };
+
+
                     channel.BasicConsume(
-                        queue: "hello1",
-                        autoAck: false,
+                        queue: Constant.QUEUE,
+                        autoAck: Constant.AUTO_ACK,
                         consumer: consumer);
 
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();
                 }
             }
-
         }
     }
 }

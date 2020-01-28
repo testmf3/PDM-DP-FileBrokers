@@ -1,7 +1,6 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using System;
-using System.Collections.Generic;
 
 namespace broker
 {
@@ -11,7 +10,8 @@ namespace broker
 
         public void Exchange(Message message)
         {
-            DestinationInfo destination = new DestinationInfo();
+
+            ConnectionFactory factory = null;
 
             if (message != null)
             {
@@ -20,44 +20,51 @@ namespace broker
                 {
                     case "sender_001":
                         {
-                            destination.userName = "testmf2";
-                            destination.password = "As123456";
-                            destination.destination = "Worker-001";
-                            destination.port = 5672;
-                            destination.hostName = "94.131.241.80";
+
+                            factory = new ConnectionFactory()
+                            {
+                                HostName = Constant.WORKER_001.hostName,
+                                Port = Constant.WORKER_001.port,
+                                UserName = Constant.WORKER_001.userName,
+                                Password = Constant.WORKER_001.password
+                            };
+
+                           
                         }; break;
+
 
                     default:
                         {
                             Console.WriteLine("Not catch");
-                        }; break;
+                            return;
+                        };
                 }
 
-                Connect(destination, message);
+
+                Connect(factory, message); 
             }
         }
 
 
-        private void Connect(DestinationInfo destination, Message message)
+        private void Connect(ConnectionFactory factory, Message message)
         {
             Console.WriteLine("Check destination: ");
-            Console.WriteLine(destination);
+            Console.WriteLine(factory.UserName);
             Console.WriteLine();
-
-            var factory = new RabbitMQ.Client.ConnectionFactory() { 
-                HostName = destination.hostName, 
-                Port = destination.port, 
-                UserName = destination.userName, 
-                Password = destination.password
-            };
 
 
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello1", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(
+                        queue: Constant.SEND_QUEUE, 
+                        durable: Constant.DURABLE, 
+                        exclusive: Constant.EXCLUSIVE, 
+                        autoDelete: Constant.AUTO_DELETE, 
+                        arguments: Constant.ARGUMENTS);
 
+                    //Message builder
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
                     messageBuilder.Body["number"] = message.number;
 
@@ -71,7 +78,12 @@ namespace broker
                     */
 
   
-                    channel.BasicPublish(exchange: "", routingKey: "hello1", basicProperties: null, body: messageBuilder.GetContentBody());
+                    channel.BasicPublish(
+                        exchange: Constant.EXCHANGE, 
+                        routingKey: Constant.ROUTING_KEY, 
+                        basicProperties: Constant.PROPERTIES, 
+                        body: messageBuilder.GetContentBody());
+
                     Console.WriteLine(" [x] Sent {0}", message);
                 }
             }

@@ -4,7 +4,7 @@ namespace sender_001
 {
     class Message
     {
-        public string applicationName { get; } = "sender_001";
+        public string applicationName { get; } = Constant.APPLICATON_NAME;
         public DateTime date { get; set; }
         public int number { get; set; }
 

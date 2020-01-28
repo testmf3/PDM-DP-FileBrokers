@@ -7,7 +7,7 @@ namespace broker
     class Program
     {
 
-        static List<String> names = new List<string> { "sender_001" };
+        static List<string> names = new List<string> { "sender_001" };
         
         private Send sender;
         private Receive receive;

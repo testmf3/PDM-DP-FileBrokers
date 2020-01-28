@@ -1,13 +1,9 @@
 ﻿using RabbitMQ.Client.Content;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace worker_001
 {
-    class Config
-    {
-        public string applicationName { get; set; }
+    class Config { 
+ 
         public int number { get; set; }
 
 
@@ -18,13 +14,13 @@ namespace worker_001
 
         public int Sum(int value)
         {
-            this.number = this.number + value;
-            return this.number;
+            number += value;
+            return number;
         }
 
         public override string ToString()
         {
-            return "Name:  " + applicationName + "\nArgument:  " + number;
+            return  "Argument:  " + number;
         }
     }
 }

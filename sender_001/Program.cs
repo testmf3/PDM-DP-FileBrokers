@@ -1,7 +1,6 @@
 ﻿using System;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
-using System.Threading;
 
 namespace sender_001
 {
@@ -25,25 +24,31 @@ namespace sender_001
             Program pr = new Program();
 
             pr.Notify += SendMessage;
-            pr.Sum(2, 2);
+            pr.Sum(1, 2);
             pr.Notify -= SendMessage;
         }
 
         private static void SendMessage(Message message)
         {
            
-            var factory = new RabbitMQ.Client.ConnectionFactory() { 
-                HostName = "94.131.241.80", 
-                Port = 5672, 
-                UserName = "testmf3", 
-                Password = "As123456" };
+            var factory = new ConnectionFactory() { 
+                HostName = Constant.HOST_NAME, 
+                Port = Constant.PORT, 
+                UserName = Constant.USER_NAME, 
+                Password = Constant.PASSWORD };
 
 
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(
+                        queue: Constant.QUEUE, 
+                        durable: Constant.DURABLE, 
+                        exclusive: Constant.EXCLUSIVE, 
+                        autoDelete: Constant.AUTO_DELETE, 
+                        arguments: Constant.ARGUMENTS);
+
 
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
 
@@ -54,9 +59,9 @@ namespace sender_001
 
 
                     channel.BasicPublish(
-                        exchange: "",
-                        routingKey: "hello",
-                        basicProperties: null,
+                        exchange: Constant.EXCHANGE,
+                        routingKey: Constant.ROUTING_KEY,
+                        basicProperties: Constant.PROPERTIES,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);

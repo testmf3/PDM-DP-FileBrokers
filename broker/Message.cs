@@ -1,7 +1,5 @@
 ﻿using RabbitMQ.Client.Content;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace broker
 {
@@ -23,9 +21,9 @@ namespace broker
         public void ToMessage(IMapMessageReader messageReader)
         {
 
-            this.applicationName = messageReader.Body["applicationName"].ToString();
-            this.date = DateTime.Parse(messageReader.Body["date"].ToString());
-            this.number = int.Parse(messageReader.Body["number"].ToString());
+            applicationName = messageReader.Body["applicationName"].ToString();
+            date = DateTime.Parse(messageReader.Body["date"].ToString());
+            number = int.Parse(messageReader.Body["number"].ToString());
 
         }
 
