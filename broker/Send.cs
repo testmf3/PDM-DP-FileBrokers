@@ -1,12 +1,44 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using System;
+using System.Collections.Generic;
 
 namespace broker
 {
     class Send
     {
-        public void Connect(DestinationInfo destination, Message message)
+
+
+        public void Exchange(Message message)
+        {
+            DestinationInfo destination = new DestinationInfo();
+
+            if (message != null)
+            {
+                //TODO switch
+                switch (message.applicationName)
+                {
+                    case "sender_001":
+                        {
+                            destination.userName = "testmf2";
+                            destination.password = "As123456";
+                            destination.destination = "Worker-001";
+                            destination.port = 5672;
+                            destination.hostName = "94.131.241.80";
+                        }; break;
+
+                    default:
+                        {
+                            Console.WriteLine("Not catch");
+                        }; break;
+                }
+
+                Connect(destination, message);
+            }
+        }
+
+
+        private void Connect(DestinationInfo destination, Message message)
         {
             Console.WriteLine("Check destination: ");
             Console.WriteLine(destination);

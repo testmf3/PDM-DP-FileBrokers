@@ -6,65 +6,48 @@ namespace broker
 {
     class Program
     {
-        static List<String> names = new List<string> { "sender_001"};
 
-        static void Exchange(Message message)
-        {
-            DestinationInfo destination = new DestinationInfo();
-           
-            if (message != null)
-            {
-                //TODO switch
-                switch (message.applicationName)
-                {
-                    case "sender_001":
-                        {
-                            destination.userName = "testmf2";
-                            destination.password = "As123456";
-                            destination.destination = "Worker-001";
-                            destination.port = 5672;
-                            destination.hostName = "94.131.241.80";
-                        }; break;
+        static List<String> names = new List<string> { "sender_001" };
+        
+        private Send sender;
+        private Receive receive;
+        private Message message;
 
-                    default:
-                        {
-                            Console.WriteLine("Not catch");
-                        }; break;
-                }
-
-             
-                Send sender = new Send();
-             
-                sender.Connect(destination, message);
-            }
+        Program() {
+            sender = new Send();
+            receive = new Receive();
+            message = new Message();
         }
 
         static void Main(string[] args)
         {
 
-          
-            Receive receive = new Receive();
 
-            Message message = new Message();
+            Program program = new Program();
+            
+        
+
             Thread.Sleep(5000);
             Console.WriteLine("Receive:");
-            receive.Connect(ref message);
+            program.receive.Connect(ref program.message);
 
             Console.WriteLine("Message:");
-            Console.WriteLine(message);
+            Console.WriteLine(program.message);
             Console.ReadLine();
 
+
             //1:n
+           
             names.ForEach(name =>
             {
                 Console.WriteLine("Send to " + name);
-                message.applicationName = name;
-                Exchange(message);
+                program.message.applicationName = name;
+                program.sender.Exchange(program.message);
 
             });
 
-      
-            
+
+
             Console.WriteLine("end:");
             Console.ReadLine();
            
