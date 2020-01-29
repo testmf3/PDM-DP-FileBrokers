@@ -1,20 +1,60 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace broker
 {
     class Send
     {
+        private IConfiguration config;
 
+        List<Config> configuration;
 
-        public void Exchange(Message message)
+        public void getConfig()
         {
+            config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
 
+
+            configuration = new List<Config>();
+            config.GetSection("config").Bind(configuration);
+
+
+            //Test
+            Console.WriteLine("All worker");
+            configuration.ForEach(
+                config => Console.WriteLine(config)
+                );
+        }
+
+
+        public void ExchangeLoop(Message message) {
+            
+            getConfig();
+
+            //Test
+            Console.WriteLine("Find worker by type");
+            configuration.FindAll(x => x.type == message.type).ForEach(x => Console.WriteLine(x));
+            
+            //configuration.FindAll(config=>config.type == message.type).ForEach(config => Exchange(message, config));
+
+        }
+
+
+        public void Exchange(Message message, Config config)
+        {
+           
+            //TODO factory in config
             ConnectionFactory factory = null;
+
 
             if (message != null)
             {
+                
                 //TODO switch
                 switch (message.applicationName)
                 {
@@ -23,6 +63,7 @@ namespace broker
 
                             factory = new ConnectionFactory()
                             {
+                                //HostName = config.applicationName,
                                 HostName = Constant.WORKER_001.hostName,
                                 Port = Constant.WORKER_001.port,
                                 UserName = Constant.WORKER_001.userName,
@@ -40,7 +81,7 @@ namespace broker
                         };
                 }
 
-
+                
                 Connect(factory, message); 
             }
         }

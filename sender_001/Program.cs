@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 
@@ -6,30 +8,53 @@ namespace sender_001
 {
     class Program
     {
-
-        public int number;
+       
+        private Message message;
         public delegate void Handler(Message message);
         public event Handler Notify;
 
+        private IConfigurationRoot config;
+        private IConfigurationBuilder builder;
+
+        Program() {
+            message = new Message();
+        }
 
         public void Sum(int a, int b)
         {
-            number = a + b;
 
-            Notify?.Invoke(new Message(number));
+            message.number = a + b;
+            Notify?.Invoke(message);
         }
 
+        public void getConfig() {
+
+            builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
+
+            message.applicationName = config["applicationName"];
+            message.type = config["type"];
+        }
         static void Main(string[] args)
         {
-            Program pr = new Program();
 
-            pr.Notify += SendMessage;
-            pr.Sum(1, 2);
-            pr.Notify -= SendMessage;
+            Program program = new Program();
+
+            program.getConfig();
+            program.Notify += program.SendMessage;
+            program.Sum(1, 2);
+            program.Notify -= program.SendMessage;
+            
         }
 
-        private static void SendMessage(Message message)
+        private void SendMessage(Message message)
         {
+
+            Console.WriteLine(message);
+           
            
             var factory = new ConnectionFactory() { 
                 HostName = Constant.HOST_NAME, 
@@ -56,6 +81,7 @@ namespace sender_001
                     messageBuilder.Body["applicationName"] = message.applicationName;
                     messageBuilder.Body["number"] = message.number;
                     messageBuilder.Body["date"] = message.date.ToString();
+                    messageBuilder.Body["type"] = message.type;
 
 
                     channel.BasicPublish(
@@ -69,7 +95,7 @@ namespace sender_001
                     Console.ReadLine();
                 }
             }
-
+            
         }
     }
 }

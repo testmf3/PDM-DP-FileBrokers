@@ -4,10 +4,11 @@ namespace sender_001
 {
     class Message
     {
-        public string applicationName { get; } = Constant.APPLICATON_NAME;
+        public string applicationName { get; set; }
         public DateTime date { get; set; }
         public int number { get; set; }
 
+        public string type { get; set; }
         public Message(int number)
         {
             date = DateTime.Now;
@@ -16,7 +17,14 @@ namespace sender_001
 
         public override string ToString()
         {
-            return "name: " + applicationName + "\ndate: " + date;
+            return "name: " + applicationName + 
+                "\ndate: " + date + 
+                "\nnumber: " + number + 
+                "\ntype: " + type;
+        }
+
+        public Message() {
+            date = DateTime.Now;
         }
     }
 }
