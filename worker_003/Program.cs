@@ -50,6 +50,7 @@ namespace worker_003
                         //Unsuscribe
                         channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
+                        Console.WriteLine();
 
                     };
 

@@ -31,9 +31,7 @@ namespace broker
 
             Console.WriteLine("Receive:");
             program.receive.Connect(program.message);   
-           
-            
-            //program.sender.ExchangeLoop(program.message);
+
             Console.WriteLine("end:");
             Console.ReadLine();
            

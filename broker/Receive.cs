@@ -47,9 +47,6 @@ namespace broker
 
                         sender.ExchangeLoop(message);
 
-                        Console.WriteLine("Receive message: ");
-                        Console.WriteLine(message);
-
                     };
 
                     receivedMessage = message;

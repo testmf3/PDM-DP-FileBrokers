@@ -9,7 +9,7 @@ namespace worker_003
         //Declare factory
         public static readonly string HOST_NAME = "94.131.241.80";
         public static readonly Int32 PORT = 5672;
-        public static readonly string USER_NAME = "testmf2";
+        public static readonly string USER_NAME = "testmf3";
         public static readonly string PASSWORD = "As123456";
 
 

@@ -89,9 +89,6 @@ namespace broker
 
         private void Connect(ConnectionFactory factory, Message message)
         {
-            Console.WriteLine("Check destination: ");
-            Console.WriteLine(factory.UserName);
-            Console.WriteLine();
 
 
             using (var connection = factory.CreateConnection())
@@ -126,6 +123,7 @@ namespace broker
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);
+                    Console.WriteLine();
                 }
             }
         }
