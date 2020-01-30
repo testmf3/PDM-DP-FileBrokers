@@ -44,18 +44,26 @@ namespace sender_001
             Program program = new Program();
 
             program.getConfig();
-            program.Notify += program.SendMessage;
-            program.Sum(1, 2);
-            program.Notify -= program.SendMessage;
-            
+
+
+            //Test in real time
+            while (true)
+            {
+                Console.WriteLine("a: ");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine("b: ");
+                int b = int.Parse(Console.ReadLine());
+                program.Notify += program.SendMessage;
+                program.Sum(a, b);
+                program.Notify -= program.SendMessage;
+
+            }
         }
 
         private void SendMessage(Message message)
         {
 
-            Console.WriteLine(message);
-           
-           
+        
             var factory = new ConnectionFactory() { 
                 HostName = Constant.HOST_NAME, 
                 Port = Constant.PORT, 
@@ -79,10 +87,11 @@ namespace sender_001
 
 
                     messageBuilder.Body["applicationName"] = message.applicationName;
+                    messageBuilder.Body["type"] = message.type;
                     messageBuilder.Body["number"] = message.number;
                     messageBuilder.Body["date"] = message.date.ToString();
-                    messageBuilder.Body["type"] = message.type;
-
+                   
+               
 
                     channel.BasicPublish(
                         exchange: Constant.EXCHANGE,

@@ -8,7 +8,9 @@ namespace broker
 {
     class Receive
     {
-        public void Connect(ref Message receivedMessage)
+        private Send sender = new Send();
+
+        public void Connect(Message receivedMessage)
         {
 
             var factory = new ConnectionFactory() { 
@@ -42,6 +44,8 @@ namespace broker
                         //Build message
                         IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
                         message.ToMessage(messageReader);
+
+                        sender.ExchangeLoop(message);
 
                         Console.WriteLine("Receive message: ");
                         Console.WriteLine(message);

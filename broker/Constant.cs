@@ -25,7 +25,7 @@ namespace broker
 
 
         //Queue Receive Declare 
-        public static readonly string RECEIVE_QUEUE = "hello";
+        public static readonly string RECEIVE_QUEUE = "hello3";
         public static readonly bool DURABLE = false;
         public static readonly bool EXCLUSIVE = false;
         public static readonly bool AUTO_DELETE = false;

@@ -5,12 +5,13 @@ namespace broker
 {
     class Message
     {
-        public string applicationName;
-        public DateTime date;
-        public int number;
-        public string type;
+        public string applicationName { get; set; }
 
-        public Message(string applicationName, DateTime date, int number, string type)
+        public string type { get; set; }
+        public DateTime date { get; set; }
+        public int number { get; set; }
+
+        public Message(string applicationName, string type, DateTime date, int number)
         {
             this.applicationName = applicationName;
             this.date = date;

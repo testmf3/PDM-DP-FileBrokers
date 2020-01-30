@@ -23,12 +23,12 @@ namespace broker
             configuration = new List<Config>();
             config.GetSection("config").Bind(configuration);
 
-
+            /*
             //Test
             Console.WriteLine("All worker");
             configuration.ForEach(
                 config => Console.WriteLine(config)
-                );
+                );*/
         }
 
 
@@ -37,10 +37,10 @@ namespace broker
             getConfig();
 
             //Test
-            Console.WriteLine("Find worker by type");
-            configuration.FindAll(x => x.type == message.type).ForEach(x => Console.WriteLine(x));
+            //Console.WriteLine("Find worker by type");
+            //configuration.FindAll(x => x.type == message.type).ForEach(x => Console.WriteLine(x));
             
-            //configuration.FindAll(config=>config.type == message.type).ForEach(config => Exchange(message, config));
+            configuration.FindAll(config=>config.type == message.type).ForEach(config => Exchange(message, config));
 
         }
 

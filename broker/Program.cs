@@ -29,19 +29,11 @@ namespace broker
             Program program = new Program();
 
 
-            
-            Thread.Sleep(5000);
             Console.WriteLine("Receive:");
-            program.receive.Connect(ref program.message);
-
-            Console.WriteLine("Message:");
-            Console.WriteLine(program.message);
-            Console.ReadLine();
-
-
-            program.sender.ExchangeLoop(program.message);
-
-    
+            program.receive.Connect(program.message);   
+           
+            
+            //program.sender.ExchangeLoop(program.message);
             Console.WriteLine("end:");
             Console.ReadLine();
            
