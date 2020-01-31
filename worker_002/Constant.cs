@@ -14,7 +14,6 @@ namespace worker_002
 
 
         //Declare queue
-        public static readonly string QUEUE = "hello1";
         public static readonly bool DURABLE = false;
         public static readonly bool EXCLUSIVE = false;
         public static readonly bool AUTO_DELETE = false;

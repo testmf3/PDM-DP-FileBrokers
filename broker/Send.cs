@@ -21,27 +21,13 @@ namespace broker
 
 
             configuration = new List<Config>();
-            config.GetSection("config").Bind(configuration);
-
-            /*
-            //Test
-            Console.WriteLine("All worker");
-            configuration.ForEach(
-                config => Console.WriteLine(config)
-                );*/
+            config.GetSection("config").Bind(configuration);        
         }
 
 
         public void ExchangeLoop(Message message) {
-            
             getConfig();
-
-            //Test
-            //Console.WriteLine("Find worker by type");
-            //configuration.FindAll(x => x.type == message.type).ForEach(x => Console.WriteLine(x));
-            
             configuration.FindAll(config=>config.type == message.type).ForEach(config => Exchange(message, config));
-
         }
 
 
@@ -50,7 +36,6 @@ namespace broker
            
             //TODO factory in config
             ConnectionFactory factory = null;
-
 
             if (message != null)
             {
@@ -63,7 +48,6 @@ namespace broker
 
                             factory = new ConnectionFactory()
                             {
-                                //HostName = config.applicationName,
                                 HostName = Constant.WORKER_001.hostName,
                                 Port = Constant.WORKER_001.port,
                                 UserName = Constant.WORKER_001.userName,
@@ -71,6 +55,19 @@ namespace broker
                             };
 
                            
+                        }; break;
+                    case "sender_002":
+                        {
+
+                            factory = new ConnectionFactory()
+                            {
+                                HostName = Constant.WORKER_001.hostName,
+                                Port = Constant.WORKER_001.port,
+                                UserName = Constant.WORKER_001.userName,
+                                Password = Constant.WORKER_001.password
+                            };
+
+
                         }; break;
 
 
@@ -89,14 +86,15 @@ namespace broker
 
         private void Connect(ConnectionFactory factory, Message message)
         {
-
+            string queue = message.type;
+            string routingKey = message.type;
 
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
                     channel.QueueDeclare(
-                        queue: Constant.SEND_QUEUE, 
+                        queue: queue, 
                         durable: Constant.DURABLE, 
                         exclusive: Constant.EXCLUSIVE, 
                         autoDelete: Constant.AUTO_DELETE, 
@@ -118,7 +116,7 @@ namespace broker
   
                     channel.BasicPublish(
                         exchange: Constant.EXCHANGE, 
-                        routingKey: Constant.ROUTING_KEY, 
+                        routingKey: routingKey, 
                         basicProperties: Constant.PROPERTIES, 
                         body: messageBuilder.GetContentBody());
 

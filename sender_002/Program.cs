@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
@@ -51,6 +52,21 @@ namespace sender_002
             program.getConfig();
 
 
+            //Generate message
+            int numberOfMessages = 10;
+            Random random = new Random();
+            for (int i = 0; i < numberOfMessages; i++)
+            {
+                int a = random.Next(1, 101);
+                int b = random.Next(1, 6);
+
+                program.Notify += program.SendMessage;
+                program.Div(a, b);
+                program.Notify -= program.SendMessage;
+                Thread.Sleep(2000);
+            }
+
+            /*
             //Test in real time
             while (true)
             {
@@ -62,7 +78,10 @@ namespace sender_002
                 program.Div(a, b);
                 program.Notify -= program.SendMessage;
 
-            }
+            }*/
+
+            Console.WriteLine(" Press [enter] to exit.");
+            Console.ReadLine();
         }
 
         private void SendMessage(Message message)
@@ -107,8 +126,7 @@ namespace sender_002
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);
-                    Console.WriteLine(" Press [enter] to exit.");
-                    Console.ReadLine();
+                   
                 }
             }
 

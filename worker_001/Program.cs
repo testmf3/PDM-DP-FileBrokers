@@ -1,14 +1,32 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
 using System;
+using System.IO;
 
 namespace worker_001
 {
     class Program
     {
+        private static Program program = new Program();
+        private IConfigurationRoot config;
+        private IConfigurationBuilder builder;
+        private static string queue;
+        public void getConfig()
+        {
+
+            builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
+            queue = config["type"];
+        }
+
         static void Main(string[] args)
         {
+            program.getConfig();
             var factory = new ConnectionFactory()
             {
                 HostName = Constant.HOST_NAME,
@@ -22,7 +40,7 @@ namespace worker_001
                 using (var channel = connection.CreateModel())
                 {
                     channel.QueueDeclare(
-                        queue: Constant.QUEUE,
+                        queue: queue,
                         durable: Constant.DURABLE,
                         exclusive: Constant.EXCLUSIVE,
                         autoDelete: Constant.AUTO_DELETE,
@@ -55,7 +73,7 @@ namespace worker_001
 
 
                     channel.BasicConsume(
-                        queue: Constant.QUEUE,
+                        queue: queue,
                         autoAck: Constant.AUTO_ACK,
                         consumer: consumer);
 

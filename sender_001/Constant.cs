@@ -16,10 +16,9 @@ namespace sender_001
 
 
 
-        public static readonly string APPLICATON_NAME = "sender_001";
 
         //Declare Channel
-        public static readonly string QUEUE = "hello3";
+        public static readonly string QUEUE = "sender";
         public static readonly bool DURABLE = false;
         public static readonly bool EXCLUSIVE = false;
         public static readonly bool AUTO_DELETE = false;
@@ -27,7 +26,7 @@ namespace sender_001
 
         //Basic Publish
         public static readonly string EXCHANGE = "";
-        public static readonly string ROUTING_KEY = "hello3";
+        public static readonly string ROUTING_KEY = "sender";
         public static readonly IBasicProperties PROPERTIES = null;
 
     
