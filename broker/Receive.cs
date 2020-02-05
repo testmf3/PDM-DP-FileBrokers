@@ -10,8 +10,9 @@ namespace broker
     {
         private Send sender = new Send();
 
-        public void Connect(Message receivedMessage)
+        public void Connect()
         {
+            Message receivedMessage = new Message();
 
             var factory = new ConnectionFactory() { 
                 HostName = Constant.SENDER_001.hostName, 
@@ -50,7 +51,10 @@ namespace broker
                     };
 
                     receivedMessage = message;
-                    channel.BasicConsume(queue: Constant.RECEIVE_QUEUE, autoAck: Constant.AUTO_ACK, consumer: consumer);
+                    channel.BasicConsume(
+                        queue: Constant.RECEIVE_QUEUE, 
+                        autoAck: Constant.AUTO_ACK, 
+                        consumer: consumer);
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();
                 }

@@ -21,7 +21,7 @@ namespace worker_002
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
-            queue = config["type"];
+            queue = config["type"]+"_new";
         }
 
         static void Main(string[] args)
@@ -40,12 +40,15 @@ namespace worker_002
             {
                 using (var channel = connection.CreateModel())
                 {
+                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
+                    /*
                     channel.QueueDeclare(
                         queue: queue,
                         durable: Constant.DURABLE,
                         exclusive: Constant.EXCLUSIVE,
                         autoDelete: Constant.AUTO_DELETE,
                         arguments: Constant.ARGUMENTS);
+                        */
 
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -69,6 +72,8 @@ namespace worker_002
                         //Unsuscribe
                         channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
+
+//                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                     };
 

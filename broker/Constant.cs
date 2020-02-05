@@ -23,20 +23,18 @@ namespace broker
 
 
         //Queue Receive Declare 
-        public static readonly string RECEIVE_QUEUE = "sender";
-        public static readonly bool DURABLE = false;
+        public static readonly string RECEIVE_QUEUE = "sender_new";
+        public static readonly bool DURABLE = true;
         public static readonly bool EXCLUSIVE = false;
-        public static readonly bool AUTO_DELETE = false;
+        public static readonly bool AUTO_DELETE = true;
         public static readonly IDictionary<string, object> ARGUMENTS = null;
 
 
         //Basic Consume
         public static readonly bool AUTO_ACK = false;
 
-        //Queue Send Declare 
-      
-        public static readonly string EXCHANGE = "";
-        public static readonly IBasicProperties PROPERTIES = null;
 
+        //Queue Send Declare 
+        public static readonly string EXCHANGE = "";
     }
 }

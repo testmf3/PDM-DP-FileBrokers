@@ -18,16 +18,15 @@ namespace sender_001
 
 
         //Declare Channel
-        public static readonly string QUEUE = "sender";
-        public static readonly bool DURABLE = false;
+        public static readonly string QUEUE = "sender_new";
+        public static readonly bool DURABLE = true;
         public static readonly bool EXCLUSIVE = false;
-        public static readonly bool AUTO_DELETE = false;
+        public static readonly bool AUTO_DELETE = true;
         public static readonly IDictionary<string, object> ARGUMENTS = null;
 
         //Basic Publish
         public static readonly string EXCHANGE = "";
-        public static readonly string ROUTING_KEY = "sender";
-        public static readonly IBasicProperties PROPERTIES = null;
+        public static readonly string ROUTING_KEY = "sender_new";
 
     
 

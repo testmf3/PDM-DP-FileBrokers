@@ -11,15 +11,11 @@ namespace broker
     {
 
    
-        private Send sender;
         private Receive receive;
-        private Message message;
         
 
         Program() {
-            sender = new Send();
             receive = new Receive();
-            message = new Message();
         }
       
         static void Main(string[] args)
@@ -30,7 +26,7 @@ namespace broker
 
 
             Console.WriteLine("Receive:");
-            program.receive.Connect(program.message);   
+            program.receive.Connect();   
 
             Console.WriteLine("end:");
             Console.ReadLine();

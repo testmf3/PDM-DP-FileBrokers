@@ -14,9 +14,9 @@ namespace worker_001
 
 
         //Declare queue
-        public static readonly bool DURABLE = false;
+        public static readonly bool DURABLE = true;
         public static readonly bool EXCLUSIVE = false;
-        public static readonly bool AUTO_DELETE = false;
+        public static readonly bool AUTO_DELETE = true;
         public static readonly IDictionary<string,object> ARGUMENTS = null;
 
 

@@ -86,8 +86,8 @@ namespace broker
 
         private void Connect(ConnectionFactory factory, Message message)
         {
-            string queue = message.type;
-            string routingKey = message.type;
+            string queue = message.type+"_new";
+            string routingKey = message.type + "_new";
 
             using (var connection = factory.CreateConnection())
             {
@@ -100,9 +100,17 @@ namespace broker
                         autoDelete: Constant.AUTO_DELETE, 
                         arguments: Constant.ARGUMENTS);
 
+
                     //Message builder
                     IMapMessageBuilder messageBuilder = new MapMessageBuilder(channel);
                     messageBuilder.Body["number"] = message.number;
+
+                    channel.ExchangeDeclare("logs", ExchangeType.Fanout);
+
+                    channel.QueueBind(
+                        queue: queue,
+                        exchange: "logs",
+                        routingKey: routingKey);
 
                     /*
                     //Suscribe
@@ -113,11 +121,13 @@ namespace broker
                     };
                     */
 
+                    IBasicProperties props = channel.CreateBasicProperties();
+                    props.DeliveryMode = 2;
   
                     channel.BasicPublish(
-                        exchange: Constant.EXCHANGE, 
+                        exchange: Constant.EXCHANGE,
                         routingKey: routingKey, 
-                        basicProperties: Constant.PROPERTIES, 
+                        basicProperties: props, 
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);

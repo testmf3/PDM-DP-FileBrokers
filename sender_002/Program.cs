@@ -118,11 +118,13 @@ namespace sender_002
                     messageBuilder.Body["date"] = message.date.ToString();
 
 
+                    IBasicProperties props = channel.CreateBasicProperties();
+                    props.DeliveryMode = 2;
 
                     channel.BasicPublish(
                         exchange: Constant.EXCHANGE,
                         routingKey: Constant.ROUTING_KEY,
-                        basicProperties: Constant.PROPERTIES,
+                        basicProperties: props,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);

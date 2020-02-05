@@ -21,7 +21,7 @@ namespace worker_001
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
-            queue = config["type"];
+            queue = config["type"]+"_new";
         }
 
         static void Main(string[] args)
@@ -66,9 +66,11 @@ namespace worker_001
                         Console.WriteLine(config);
 
                         //Unsuscribe
-                        channel.BasicReject(ea.DeliveryTag, false);
+//                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
                         Console.WriteLine();
+
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: true);
                     };
 
 
@@ -76,6 +78,7 @@ namespace worker_001
                         queue: queue,
                         autoAck: Constant.AUTO_ACK,
                         consumer: consumer);
+
 
                     Console.WriteLine(" Press [enter] to exit.");
                     Console.ReadLine();
