@@ -40,15 +40,15 @@ namespace worker_002
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
-                    /*
+//                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
+                    
                     channel.QueueDeclare(
                         queue: queue,
                         durable: Constant.DURABLE,
                         exclusive: Constant.EXCLUSIVE,
                         autoDelete: Constant.AUTO_DELETE,
                         arguments: Constant.ARGUMENTS);
-                        */
+                        
 
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -70,10 +70,10 @@ namespace worker_002
                         Console.WriteLine(config);
 
                         //Unsuscribe
-                        channel.BasicReject(ea.DeliveryTag, false);
+//                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
 
-//                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                     };
 

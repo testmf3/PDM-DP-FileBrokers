@@ -70,7 +70,7 @@ namespace worker_001
                         Console.WriteLine(" [x] Done");
                         Console.WriteLine();
 
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: true);
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
 
 
