@@ -40,13 +40,11 @@ namespace broker
         public void Exchange(Message message, Config config)
         {
            
-            //TODO factory in config
             ConnectionFactory factory = null;
 
             if (message != null)
             {
                 
-                //TODO switch
                 switch (message.applicationName)
                 {
                     case "sender_001":

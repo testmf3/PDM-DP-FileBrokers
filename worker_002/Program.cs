@@ -45,8 +45,6 @@ namespace worker_002
             {
                 using (var channel = connection.CreateModel())
                 {
-//                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
-                    
                     channel.QueueDeclare(
                         queue: queue,
                         durable: Constant.DURABLE,
@@ -74,8 +72,6 @@ namespace worker_002
                         Console.WriteLine("To config object after div");
                         Console.WriteLine(config);
 
-                        //Unsuscribe
-//                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);

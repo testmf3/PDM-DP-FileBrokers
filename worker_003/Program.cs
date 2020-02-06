@@ -44,8 +44,6 @@ namespace worker_003
             {
                 using (var channel = connection.CreateModel())
                 {
-//                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
-                    
                     channel.QueueDeclare(
                         queue: queue,
                         durable: Constant.DURABLE,
@@ -72,13 +70,7 @@ namespace worker_003
                         Console.WriteLine("To config object after sum");
                         Console.WriteLine(config);
 
-                        //Unsuscribe
-                        /*
-                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
-                        Console.WriteLine();
-                        */
-
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
 

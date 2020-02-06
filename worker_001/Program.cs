@@ -70,8 +70,6 @@ namespace worker_001
                         Console.WriteLine("To config object after sum");
                         Console.WriteLine(config);
 
-                        //Unsuscribe
-//                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
                         Console.WriteLine();
 
