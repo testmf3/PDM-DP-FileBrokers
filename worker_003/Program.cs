@@ -4,6 +4,7 @@ using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace worker_003
 {
@@ -15,9 +16,13 @@ namespace worker_003
         private static string queue;
         public void getConfig()
         {
+            string configPath = Path.GetDirectoryName(Assembly
+                .GetEntryAssembly()
+                .Location.Substring(0, Assembly.GetEntryAssembly()
+                .Location.IndexOf("bin\\")));
 
             builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(configPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();

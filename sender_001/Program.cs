@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
@@ -29,9 +30,13 @@ namespace sender_001
         }
 
         public void getConfig() {
+            string configPath = Path.GetDirectoryName(Assembly
+                .GetEntryAssembly()
+                .Location.Substring(0, Assembly.GetEntryAssembly()
+                .Location.IndexOf("bin\\")));
 
             builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(configPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
