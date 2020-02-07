@@ -4,6 +4,7 @@ using RabbitMQ.Client.Content;
 using RabbitMQ.Client.Events;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace worker_003
 {
@@ -15,9 +16,13 @@ namespace worker_003
         private static string queue;
         public void getConfig()
         {
+            string configPath = Path.GetDirectoryName(Assembly
+                .GetEntryAssembly()
+                .Location.Substring(0, Assembly.GetEntryAssembly()
+                .Location.IndexOf("bin\\")));
 
             builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(configPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
@@ -39,15 +44,13 @@ namespace worker_003
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
-                    /*
                     channel.QueueDeclare(
                         queue: queue,
                         durable: Constant.DURABLE,
                         exclusive: Constant.EXCLUSIVE,
                         autoDelete: Constant.AUTO_DELETE,
                         arguments: Constant.ARGUMENTS);
-                        */
+
 
                     var consumer = new EventingBasicConsumer(channel);
 
@@ -67,12 +70,8 @@ namespace worker_003
                         Console.WriteLine("To config object after sum");
                         Console.WriteLine(config);
 
-                        //Unsuscribe
-                        channel.BasicReject(ea.DeliveryTag, false);
                         Console.WriteLine(" [x] Done");
-                        Console.WriteLine();
-
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: true);
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
 
 
