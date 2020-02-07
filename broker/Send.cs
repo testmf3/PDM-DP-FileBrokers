@@ -77,7 +77,6 @@ namespace broker
                     };
                     */
 
-  
                     channel.BasicPublish(
                         exchange: Constant.EXCHANGE, 
                         routingKey: Constant.ROUTING_KEY, 

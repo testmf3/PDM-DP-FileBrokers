@@ -41,5 +41,6 @@ namespace broker
         public static readonly string ROUTING_KEY = "hello1";
         public static readonly IBasicProperties PROPERTIES = null;
 
+
     }
 }

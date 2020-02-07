@@ -57,11 +57,13 @@ namespace sender_001
                     messageBuilder.Body["number"] = message.number;
                     messageBuilder.Body["date"] = message.date.ToString();
 
+                    var properties = channel.CreateBasicProperties();
+                    properties.ContentType = "text/plain";
 
                     channel.BasicPublish(
                         exchange: Constant.EXCHANGE,
                         routingKey: Constant.ROUTING_KEY,
-                        basicProperties: Constant.PROPERTIES,
+                        basicProperties: properties,
                         body: messageBuilder.GetContentBody());
 
                     Console.WriteLine(" [x] Sent {0}", message);

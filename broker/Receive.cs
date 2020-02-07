@@ -25,7 +25,7 @@ namespace broker
                 {
                     
                     channel.QueueDeclare(
-                        queue: Constant.RECEIVE_QUEUE, 
+                        queue: Constant.SEND_QUEUE, 
                         durable: Constant.DURABLE, 
                         exclusive: Constant.EXCLUSIVE, 
                         autoDelete: Constant.AUTO_DELETE, 
@@ -38,7 +38,6 @@ namespace broker
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-
                         //Build message
                         IMapMessageReader messageReader = new MapMessageReader(ea.BasicProperties, ea.Body);
                         message.ToMessage(messageReader);
