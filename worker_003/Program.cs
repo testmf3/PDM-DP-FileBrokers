@@ -26,7 +26,7 @@ namespace worker_003
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
-            queue = config["type"]+"_new";
+            queue = config["type"];
         }
 
         static void Main(string[] args)

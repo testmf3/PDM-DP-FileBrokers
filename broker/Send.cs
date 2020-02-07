@@ -90,8 +90,8 @@ namespace broker
 
         private void Connect(ConnectionFactory factory, Message message)
         {
-            string queue = message.type+"_new";
-            string routingKey = message.type + "_new";
+            string queue = message.type;
+            string routingKey = message.type;
 
             using (var connection = factory.CreateConnection())
             {
@@ -116,14 +116,7 @@ namespace broker
                         exchange: "logs",
                         routingKey: routingKey);
 
-                    /*
-                    //Suscribe
-                    channel.ConfirmSelect();
-                    channel.BasicNacks += (sender, e) =>
-                    {
-                        Console.Write("Not received" + message);
-                    };
-                    */
+              
 
                     IBasicProperties props = channel.CreateBasicProperties();
                     props.DeliveryMode = 2;
