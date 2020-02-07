@@ -1,7 +1,7 @@
 ﻿using RabbitMQ.Client;
 using System.Collections.Generic;
 
-namespace broker
+namespace ARM.PDM.broker
 {
     class Constant
     {
@@ -22,7 +22,6 @@ namespace broker
             password = "As123456",
             destination = "worker_001"
         };
-
 
         //Queue Receive Declare 
         public static readonly string RECEIVE_QUEUE = "hello";

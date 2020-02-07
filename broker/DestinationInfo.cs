@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace broker
+namespace ARM.PDM.broker
 {
     public class DestinationInfo
     {

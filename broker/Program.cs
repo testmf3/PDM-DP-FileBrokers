@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace broker
+namespace ARM.PDM.broker
 {
     class Program
     {
@@ -13,6 +13,8 @@ namespace broker
         private Receive receive;
         private Message message;
 
+        static public Program program = new Program();
+
         Program() {
             sender = new Send();
             receive = new Receive();
@@ -21,12 +23,6 @@ namespace broker
 
         static void Main(string[] args)
         {
-
-
-            Program program = new Program();
-            
-        
-
             Thread.Sleep(5000);
             Console.WriteLine("Receive:");
             program.receive.Connect(ref program.message);

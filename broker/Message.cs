@@ -1,16 +1,20 @@
-﻿using RabbitMQ.Client.Content;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Content;
+
 using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace broker
+namespace ARM.PDM.broker
 {
     class Message
     {
         public string applicationName;
         public DateTime date;
         public int number;
+
+        public Service.Model.Message objMessage;
 
         public Message(string applicationName, DateTime date, int number)
         {
@@ -21,17 +25,34 @@ namespace broker
 
         public Message() { }
 
-        public void ToMessage(IMapMessageReader messageReader)
+        public void ToMessage(IMapMessageReader messageReader, ref IBasicProperties basicProps)
         {
-            
-            applicationName = messageReader.Body["applicationName"].ToString();
-            date = DateTime.Parse(messageReader.Body["date"].ToString());
-            number = int.Parse(messageReader.Body["number"].ToString());
+            switch (basicProps.ContentType)
+            {
+                case "application/json":
+                    {
+                        messageReader.BodyStream.Position = 0;
+                        StreamReader strMessage = new StreamReader(messageReader.BodyStream);
+                        objMessage = JsonSerializer.Deserialize<ARM.PDM.Service.Model.Message>(strMessage.ReadToEnd());
+                        applicationName = objMessage.applicationName;
+                        date = DateTime.Parse(objMessage.date);
+                        number = objMessage.data;
+                    } break;
+                case "text/plain":
+                    {
+                        applicationName = messageReader.Body["applicationName"].ToString();
+                        date = DateTime.Parse(messageReader.Body["date"].ToString());
+                        number = int.Parse(messageReader.Body["number"].ToString());
+                    } break;
+                default:
+                    {
+                        Console.WriteLine("Undefined content type");
+                        return;
+                    }
+            }
 
-            IMapMessageReader messageReadercopy = messageReader;
-            messageReadercopy.BodyStream.Position = 0;
-            StreamReader dfdg = new StreamReader(messageReadercopy.BodyStream);
-            string stream = dfdg.ReadToEnd();
+
+
         }
 
         public override string ToString()

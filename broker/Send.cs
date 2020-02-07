@@ -1,12 +1,15 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Content;
 using System;
+using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
-namespace broker
+namespace ARM.PDM.broker
 {
     class Send
     {
-
+        public IConfiguration Configuration { get; set; }
 
         public void Exchange(Message message)
         {
@@ -20,7 +23,6 @@ namespace broker
                 {
                     case "sender_001":
                         {
-
                             factory = new ConnectionFactory()
                             {
                                 HostName = Constant.WORKER_001.hostName,
@@ -28,11 +30,24 @@ namespace broker
                                 UserName = Constant.WORKER_001.userName,
                                 Password = Constant.WORKER_001.password
                             };
-
-                           
-                        }; break;
-
-
+                        }
+                        break;
+                    case "MSFlow_ProjectCreation":
+                        {
+                            using (var process = new Process())
+                            {
+                                var builder = new ConfigurationBuilder().AddJsonFile(@"..\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json");
+                                Configuration = builder.Build();
+                                Configuration["AllowedHosts"] = "ssdf";
+                                process.StartInfo.FileName = @"..\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\PDM.IO.FileBrokers.DataStructureSetup.exe";
+                                process.OutputDataReceived += (sender, data) => Console.WriteLine(data.Data);
+                                process.ErrorDataReceived += (sender, data) => Console.WriteLine(data.Data);
+                                //process.Start();
+                                //process.BeginOutputReadLine();
+                                //process.BeginErrorReadLine();
+                            }
+                        } 
+                        break;
                     default:
                         {
                             Console.WriteLine("Not catch");
