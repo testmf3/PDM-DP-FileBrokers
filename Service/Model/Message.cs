@@ -9,8 +9,7 @@ namespace ARM.PDM.Service.Model
         public string applicationName { get; set; }
         public string date { get; set; }
         public int data { get; set; }
-        public string sProject { get; set; }
-        public string sStage { get; set; }
+        public string Project { get; set; }
+        public string Stage { get; set; }
     }
 }
-

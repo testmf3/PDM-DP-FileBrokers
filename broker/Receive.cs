@@ -12,12 +12,65 @@ using System.Text.Json.Serialization;
 
 namespace ARM.PDM.broker
 {
+    public class ObjectTypesConverter : JsonConverter<Service.Model.DataStructCreatorConfig>
+    {
+        public override Service.Model.DataStructCreatorConfig Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            Service.Model.DataStructCreatorConfig objRoot = new Service.Model.DataStructCreatorConfig();
+            using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+            {
+                //if (reader.TokenType != JsonTokenType.StartObject)
+                //{
+                //    throw new JsonException();
+                //}
+
+                //if (reader.TokenType != JsonTokenType.PropertyName)
+                //{
+                //    throw new JsonException();
+                //}
+                //reader.Read();
+                string propertyName = reader.GetString();
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonTokenType.EndObject)
+                    {
+                        return objRoot;
+                    }
+                    //string propertyName = reader.GetString();
+                    if (reader.TokenType == JsonTokenType.PropertyName)
+                    {
+                        propertyName = reader.GetString();
+                        reader.Read();
+                        switch (propertyName)
+                        {
+                            case "CreditLimit":
+                                decimal creditLimit = reader.GetDecimal();
+                                //((Customer)person).CreditLimit = creditLimit;
+                                break;
+                            case "OfficeNumber":
+                                string officeNumber = reader.GetString();
+                                //((Employee)person).OfficeNumber = officeNumber;
+                                break;
+                            case "Name":
+                                string name = reader.GetString();
+                                //person.Name = name;
+                                break;
+                        }
+                    }
+                }
+            }
+            return objRoot;
+        }
+        public override void Write(Utf8JsonWriter writer, Service.Model.DataStructCreatorConfig objectToWrite, JsonSerializerOptions options)
+        {
+                var sdfss = 1;
+        }
+    }
+
     class Receive
     {
-
         public void Exchange(Message message)
         {
-
             ConnectionFactory factory = null;
 
             if (message != null)
@@ -29,10 +82,10 @@ namespace ARM.PDM.broker
                         {
                             factory = new ConnectionFactory()
                             {
-                                HostName = Constant.WORKER_001.hostName,
-                                Port = Constant.WORKER_001.port,
-                                UserName = Constant.WORKER_001.userName,
-                                Password = Constant.WORKER_001.password
+                                HostName    = Constant.WORKER_001.hostName,
+                                Port        = Constant.WORKER_001.port,
+                                UserName    = Constant.WORKER_001.userName,
+                                Password    = Constant.WORKER_001.password
                             };
                         }
                         break;
@@ -40,8 +93,17 @@ namespace ARM.PDM.broker
                         {
                             using (var process = new Process())
                             {
-                                var obj = JsonSerializer.Deserialize<Service.Model.DataStructCreatorConfig>(File.ReadAllText(@"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json"));
-                                process.StartInfo.FileName = @"..\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\PDM.IO.FileBrokers.DataStructureSetup.exe";
+                                
+                                var serializeOptionsRead = new JsonSerializerOptions();
+                                serializeOptionsRead.Converters.Add(new ObjectTypesConverter());
+                                var obj = JsonSerializer.Deserialize<Service.Model.DataStructCreatorConfig>(File.ReadAllText(@"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json"), serializeOptionsRead);
+                                obj.configset.Data.Project = message.sProject.ToArray();
+                                obj.configset.Data.StagePhase = message.sStage.ToArray();
+
+                                var serializeOptionsWrite = new JsonSerializerOptions();
+                                serializeOptionsWrite.WriteIndented = true;
+                                File.WriteAllText(@"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json", JsonSerializer.Serialize<Service.Model.DataStructCreatorConfig>(obj, serializeOptionsWrite));
+                                process.StartInfo.FileName = @"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\PDM.IO.FileBrokers.DataStructureSetup.exe";
                                 process.OutputDataReceived += (sender, data) => Console.WriteLine(data.Data);
                                 process.ErrorDataReceived += (sender, data) => Console.WriteLine(data.Data);
                                 process.Start();

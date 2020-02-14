@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace ARM.PDM.broker
 {
@@ -13,14 +14,18 @@ namespace ARM.PDM.broker
         public string applicationName;
         public DateTime date;
         public int number;
+        public List<string> sProject = new List<string>();
+        public List<string> sStage = new List<string>();
 
         public Service.Model.Message objMessage;
 
-        public Message(string applicationName, DateTime date, int number)
+        public Message(string applicationName, DateTime date, int number, string sProject, string sStage)
         {
             this.applicationName = applicationName;
             this.date = date;
             this.number = number;
+            //this.sProject.Add(sProject);
+            //this.sStage.Add(sStage);
         }
 
         public Message() { }
@@ -37,6 +42,8 @@ namespace ARM.PDM.broker
                         applicationName = objMessage.applicationName;
                         date = DateTime.Parse(objMessage.date);
                         number = objMessage.data;
+                        sProject.Add(objMessage.Project);
+                        sStage.Add(objMessage.Stage);
                     } break;
                 case "text/plain":
                     {
@@ -50,9 +57,6 @@ namespace ARM.PDM.broker
                         return;
                     }
             }
-
-
-
         }
 
         public override string ToString()

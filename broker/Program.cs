@@ -23,7 +23,7 @@ namespace ARM.PDM.broker
 
         static void Main(string[] args)
         {
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
             Console.WriteLine("Receive:");
             program.receive.Connect(ref program.message);
 
