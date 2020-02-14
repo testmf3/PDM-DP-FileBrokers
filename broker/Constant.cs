@@ -10,7 +10,7 @@ namespace broker
             hostName = "94.131.241.80",
             port = 5672,
             userName = "testmf3",
-            password = "As123456"
+            password = @"PHtsPT2e@SkdV?@"
         };
 
         public static readonly DestinationInfo WORKER_001 = new DestinationInfo
@@ -18,7 +18,7 @@ namespace broker
             hostName = "94.131.241.80",
             port = 5672,
             userName = "testmf2",
-            password = "As123456"
+            password = @"PHtsPT2e@SkdV?@"
         };
 
 
