@@ -9,10 +9,13 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace ARM.PDM.broker
 {
-    public class ObjectTypesConverter : JsonConverter<Service.Model.DataStructCreatorConfig>
+    public class ObjectTypesConverter : System.Text.Json.Serialization.JsonConverter<Service.Model.DataStructCreatorConfig>
     {
         public override Service.Model.DataStructCreatorConfig Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -96,13 +99,37 @@ namespace ARM.PDM.broker
                                 
                                 var serializeOptionsRead = new JsonSerializerOptions();
                                 serializeOptionsRead.Converters.Add(new ObjectTypesConverter());
-                                var obj = JsonSerializer.Deserialize<Service.Model.DataStructCreatorConfig>(File.ReadAllText(@"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json"), serializeOptionsRead);
-                                obj.configset.Data.Project = message.sProject.ToArray();
-                                obj.configset.Data.StagePhase = message.sStage.ToArray();
+                                string sConfigPath = @"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json";
+                                string sJSONString = File.ReadAllText(sConfigPath);
+                                //Newtonsoft
+                                JObject jObject = Newtonsoft.Json.JsonConvert.DeserializeObject(sJSONString) as JObject;
+                                JToken jTokenProject = jObject.SelectToken("configset.Data.Project");
+                                JArray jArrayProject = (JArray)jTokenProject;
+                                jArrayProject.Clear();
+                                foreach (var item in message.sProject)
+                                    jArrayProject.Add(item);
+                                jTokenProject.Replace(jArrayProject);
 
-                                var serializeOptionsWrite = new JsonSerializerOptions();
-                                serializeOptionsWrite.WriteIndented = true;
-                                File.WriteAllText(@"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\appsettings.json", JsonSerializer.Serialize<Service.Model.DataStructCreatorConfig>(obj, serializeOptionsWrite));
+                                JToken jTokenStagePhase = jObject.SelectToken("configset.Data.StagePhase");
+                                JArray jArrayStagePhase = (JArray)jTokenStagePhase;
+                                jArrayStagePhase.Clear();
+                                foreach (var item in message.sStage)
+                                    jArrayStagePhase.Add(item);
+                                jTokenStagePhase.Replace(jArrayStagePhase);
+
+                                string updatedJsonString = jObject.ToString();
+                                File.WriteAllText(sConfigPath, updatedJsonString);
+                                //.NET CORE
+                                //var obj = System.Text.Json.JsonSerializer.Deserialize<Service.Model.DataStructCreatorConfig>(sJSONString, serializeOptionsRead);
+                                //obj.configset.Data.Project = message.sProject.ToArray();
+                                //obj.configset.Data.StagePhase = message.sStage.ToArray();
+                                //var serializeOptionsWrite = new JsonSerializerOptions();
+                                //serializeOptionsWrite.WriteIndented = true;
+                                //File.WriteAllText(sConfigPath, System.Text.Json.JsonSerializer.Serialize<Service.Model.DataStructCreatorConfig>(obj, serializeOptionsWrite));
+                                
+                                
+                                
+                                
                                 process.StartInfo.FileName = @"C:\Users\d.radomtsev\source\repos\PDM.IO.FileBrokers.DataStructureSetup\bin\Release\netcoreapp3.0\PDM.IO.FileBrokers.DataStructureSetup.exe";
                                 process.OutputDataReceived += (sender, data) => Console.WriteLine(data.Data);
                                 process.ErrorDataReceived += (sender, data) => Console.WriteLine(data.Data);

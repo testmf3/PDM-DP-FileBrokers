@@ -42,7 +42,9 @@ namespace ARM.PDM.broker
                         applicationName = objMessage.applicationName;
                         date = DateTime.Parse(objMessage.date);
                         number = objMessage.data;
+                        sProject.Clear();
                         sProject.Add(objMessage.Project);
+                        sStage.Clear();
                         sStage.Add(objMessage.Stage);
                     } break;
                 case "text/plain":
